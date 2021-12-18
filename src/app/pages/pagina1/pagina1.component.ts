@@ -1,4 +1,5 @@
 import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, DoCheck, OnChanges, OnDestroy, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pagina1',
@@ -9,6 +10,10 @@ import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit,
 export class Pagina1Component implements OnInit, OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
   nombre: string = 'Alejandro';
+  segundos: number = 0;
+
+  // Referencia a una suscripción que más adelante me interesa cancelar para evitar fugas de memoria al momento de destriur este componente
+  timerSubcripcion!: Subscription;
 
   constructor() {
     console.warn('1. constructor')
@@ -22,22 +27,29 @@ export class Pagina1Component implements OnInit, OnChanges, DoCheck, AfterConten
    * Va a depender de la necesidad el usarlos o no.
    */
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.error('** ngOnChanges **')
-    console.log('Se ejecuta cuando cambia un valor de un input control dentro de un componente (@Input), o cuando cambia el valor de una propiedad vinculada. Siempre recibe un mapa de datos con el valor actual y anterior de la propiedad que ha cambiado su valor en cuestión')
-    console.log(SimpleChange)
-    console.log('---')
-  }
-
   ngOnInit(): void {
     console.warn('2. ngOnInit')
     console.log('El componente ha sido inicializado, especial para hacer peticiones http o inicializar la data del componente')
     console.log('---')
+
+    // Suscribirme a un timer RXJS para hacer tareas cada segundo
+    this.timerSubcripcion = interval(1000).subscribe( i => {
+      this.segundos++
+    })
   }
 
   ngDoCheck(): void {
     console.warn('3. ngDoCheck')
     console.log('Se ejecuta cada vez que se verifican las propiedades de entrada en el componente')
+    console.log('---')
+  }
+
+  /** Hooks que se ejecutan cada vez que Angular detecta un cambio en el componente (ciclo de detección de cambios) */
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.error('** ngOnChanges **')
+    console.log('Se ejecuta cuando cambia un valor de un input control dentro de un componente (@Input), o cuando cambia el valor de una propiedad vinculada. Siempre recibe un mapa de datos con el valor actual y anterior de la propiedad que ha cambiado su valor en cuestión')
+    console.log(SimpleChange)
     console.log('---')
   }
 
@@ -69,6 +81,9 @@ export class Pagina1Component implements OnInit, OnChanges, DoCheck, AfterConten
     console.warn('8. ngOnDestroy')
     console.log('Se ejecuta cuando el componente se destruye, útil para dar de baja a suscripción de onbservables y desconectar controladores de eventos para evitar fugas de memoria')
     console.log('---')
+
+    // Cancelar la suscripción al timer
+    this.timerSubcripcion.unsubscribe();
   }
 
 }
