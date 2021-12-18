@@ -1,3 +1,6 @@
-<p>pagina1 works!</p>
+<p>{{ nombre | uppercase }}</p>
 <input type="text" [(ngModel)]="nombre" placeholder="Tu nombre">
 <button>Click</button>
+<br>
+<br>
+<app-muestra-nombre [nombre]="nombre"></app-muestra-nombre>

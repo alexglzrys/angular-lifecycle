@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, DoCheck, OnChanges, OnDestroy, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-pagina1',
@@ -6,7 +6,7 @@ import { Component, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
   styles: [
   ]
 })
-export class Pagina1Component implements OnInit {
+export class Pagina1Component implements OnInit, OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
   nombre: string = 'Alejandro';
 
@@ -24,7 +24,7 @@ export class Pagina1Component implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.error('** ngOnChanges **')
-    console.log('Se ejecuta cuando cambia un valor de un input control dentro de un componente, o cuando cambia el valor de una propiedad vinculada. Siempre recibe un mapa de datos con el valor actual y anterior de la propiedad que ha cambiado su valor en cuestión')
+    console.log('Se ejecuta cuando cambia un valor de un input control dentro de un componente (@Input), o cuando cambia el valor de una propiedad vinculada. Siempre recibe un mapa de datos con el valor actual y anterior de la propiedad que ha cambiado su valor en cuestión')
     console.log(SimpleChange)
     console.log('---')
   }
